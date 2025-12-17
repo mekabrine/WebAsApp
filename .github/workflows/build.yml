@@ -21,7 +21,7 @@ jobs:
         run: |
           xcodegen generate
 
-      - name: Build archive (NO signing, NO validation)
+      - name: Build archive (NO signing)
         run: |
           xcodebuild archive \
             -scheme WebAsApp \
@@ -34,16 +34,17 @@ jobs:
             DEVELOPMENT_TEAM="" \
             VALIDATE_PRODUCT=NO
 
-      - name: Export unsigned IPA
+      - name: Manually create unsigned IPA
         run: |
-          xcodebuild -exportArchive \
-            -archivePath build/WebAsApp.xcarchive \
-            -exportPath build \
-            -exportOptionsPlist ExportOptions.plist \
-            CODE_SIGNING_ALLOWED=NO
+          APP_PATH="build/WebAsApp.xcarchive/Products/Applications/WebAsApp.app"
+
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+
+          zip -qry WebAsApp-unsigned.ipa Payload
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: WebAsApp-unsigned-ipa
-          path: build/*.ipa
+          path: WebAsApp-unsigned.ipa
