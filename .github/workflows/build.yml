@@ -1,0 +1,21 @@
+name: Build unsigned IPA
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install xcodegen
+      - run: xcodegen generate
+      - run: |
+          xcodebuild archive             -project WebAsApp.xcodeproj             -scheme WebAsApp             -sdk iphoneos             -archivePath build/WebAsApp.xcarchive             CODE_SIGNING_ALLOWED=NO
+      - run: |
+          xcodebuild -exportArchive             -archivePath build/WebAsApp.xcarchive             -exportOptionsPlist ExportOptions.plist             -exportPath build             CODE_SIGNING_ALLOWED=NO
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WebAsApp-unsigned-ipa
+          path: build/*.ipa

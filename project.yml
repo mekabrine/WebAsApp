@@ -1,0 +1,15 @@
+name: WebAsApp
+options:
+  bundleIdPrefix: space.mekabrine
+targets:
+  WebAsApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - WebAsApp
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: space.mekabrine.WebAsApp.1
+      CODE_SIGNING_ALLOWED: NO
+      CODE_SIGNING_REQUIRED: NO
+      CODE_SIGN_IDENTITY: ""
